@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     
     'blog',
     'django_extensions',
+    'menus',
 
     'wagtail.contrib.forms',
     'wagtail.contrib.redirects',
@@ -42,7 +43,7 @@ INSTALLED_APPS = [
     'wagtail.search',
     'wagtail.admin',
     'wagtail.core',
-    'wagtailmenus',
+    #'wagtailmenus',
 
 
     'modelcluster',
@@ -83,7 +84,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'wagtailmenus.context_processors.wagtailmenus',
+                #'wagtailmenus.context_processors.wagtailmenus',
             ],
         },
     },

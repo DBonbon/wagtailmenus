@@ -5,6 +5,7 @@ from django_extensions.db.fields import AutoSlugField
 from modelcluster.fields import ParentalManyToManyField, ParentalKey
 from modelcluster.models import ClusterableModel
 from wagtail.core import blocks
+from wagtail.core.models import Page, TranslatableMixin
 from wagtail.core.models import Orderable
 from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.admin.edit_handlers import FieldPanel, StreamFieldPanel, MultiFieldPanel, PageChooserPanel, InlinePanel
@@ -12,7 +13,7 @@ from wagtail.core.fields import RichTextField, StreamField
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
 from wagtail.snippets.models import register_snippet
 from wagtailcodeblock.blocks import CodeBlock
-from wagtailstreamforms.blocks import WagtailFormBlock
+#from wagtailstreamforms.blocks import WagtailFormBlock
 
 @register_snippet
 class Menu(ClusterableModel):
@@ -24,8 +25,8 @@ class Menu(ClusterableModel):
         MultiFieldPanel([
             FieldPanel('title'),
             FieldPanel('slug'),
-        ], heading=_("Menu")),
-        InlinePanel('menu_items', label=_("Menu Item"))
+        ], heading=("Menu")),
+        InlinePanel('menu_items', label=("Menu Item"))
     ]
 
     def __str__(self):
@@ -33,21 +34,21 @@ class Menu(ClusterableModel):
 
 
 class MenuItem(Orderable):
-    menu = ParentalKey('Menu', related_name='menu_items', help_text=_("Menu to which this item belongs"))
-    title = models.CharField(max_length=50, help_text=_("Title of menu item that will be displayed"))
-    link_url = models.CharField(max_length=500, blank=True, null=True, help_text=_("URL to link to, e.g. /accounts/signup (no language prefix, LEAVE BLANK if you want to link to a page instead of a URL)"))
+    menu = ParentalKey('Menu', related_name='menu_items', help_text=("Menu to which this item belongs"))
+    title = models.CharField(max_length=50, help_text=("Title of menu item that will be displayed"))
+    link_url = models.CharField(max_length=500, blank=True, null=True, help_text=("URL to link to, e.g. /accounts/signup (no language prefix, LEAVE BLANK if you want to link to a page instead of a URL)"))
     link_page = models.ForeignKey(
-        TranslatablePage, blank=True, null=True, related_name='+', on_delete=models.CASCADE, help_text=_("Page to link to (LEAVE BLANK if you want to link to a URL instead)"),
+        Page, blank=True, null=True, related_name='+', on_delete=models.CASCADE, help_text=("Page to link to (LEAVE BLANK if you want to link to a URL instead)"),
     )
     title_of_submenu = models.CharField(
-        blank=True, null=True, max_length=50, help_text=_("Title of submenu (LEAVE BLANK if there is no custom submenu)")
+        blank=True, null=True, max_length=50, help_text=("Title of submenu (LEAVE BLANK if there is no custom submenu)")
     )
     icon = models.ForeignKey(
         'wagtailimages.Image', blank=True, null=True, on_delete=models.SET_NULL, related_name='+',
     )
     show_when = models.CharField(
         max_length=15,
-        choices=[('always', _("Always")), ('logged_in', _("When logged in")), ('not_logged_in', _("When not logged in"))],
+        choices=[('always', ("Always")), ('logged_in', ("When logged in")), ('not_logged_in', ("When not logged in"))],
         default='always',
     )
 
@@ -69,7 +70,7 @@ class MenuItem(Orderable):
                 language = Language.objects.get(code=language_code)
             except Language.DoesNotExist: # no language found, return original page
                 return self.link_page
-            return TranslatablePage.objects.get(language=language, canonical_page=can_page)
+            return Page.objects.get(language=language, canonical_page=can_page)
         return None
 
     def trans_url(self, language_code):

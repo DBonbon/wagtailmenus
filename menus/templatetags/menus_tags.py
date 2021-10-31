@@ -1,4 +1,4 @@
-from .models import Menu
+from menus.models import Menu
 from django import template
 from django.utils import translation
 

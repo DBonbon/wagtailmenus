@@ -1,8 +1,7 @@
 {% extends "base.html" %}
 
 {% load wagtailcore_tags wagtailimages_tags %}
-{% load menu_tags %}
-{% children_menu some_other_page max_levels=2 %}
+
 {% block content %}
 
     {% for post in page.get_children.specific %}
